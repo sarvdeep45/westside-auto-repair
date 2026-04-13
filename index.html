@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FINANC1FYD Mortgage Calculator Suite</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;background:#f2f3f5;color:#0b0b0b;padding:16px}
+:root{--R:#d6001c;--R2:#9f0014;--W:#fff;--L:rgba(11,11,11,.10);--M:rgba(11,11,11,.55)}
+.shell{max-width:1100px;margin:0 auto;background:radial-gradient(ellipse at 8% 5%,rgba(214,0,28,.10),transparent 50%),radial-gradient(ellipse at 94% 18%,rgba(0,0,0,.05),transparent 48%),#f2f3f5;border:1px solid var(--L);border-radius:20px;box-shadow:0 18px 44px rgba(0,0,0,.13);padding:20px}
+/* HERO */
+.hero{text-align:center;padding:32px 16px 26px;border-bottom:1px solid var(--L)}
+.hero-inner{max-width:820px;margin:0 auto}
+.eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--R);font-weight:900;margin-bottom:10px}
+.h1{font-size:36px;font-weight:900;line-height:1.08;letter-spacing:-.02em;margin-bottom:12px}
+.hdesc{font-size:13px;line-height:1.68;color:rgba(11,11,11,.68);max-width:680px;margin:0 auto 18px}
+.badges{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.badge{padding:5px 13px;border-radius:999px;background:rgba(214,0,28,.07);border:1px solid rgba(214,0,28,.18);font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--R2)}
+.hbtns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.btnred{display:inline-flex;align-items:center;height:46px;padding:0 22px;border-radius:999px;background:linear-gradient(90deg,var(--R),var(--R2));color:#fff;text-decoration:none;font-weight:900;font-size:11px;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 10px 24px rgba(214,0,28,.22);white-space:nowrap}
+.btnghost-a{display:inline-flex;align-items:center;height:46px;padding:0 20px;border-radius:999px;background:#fff;color:#0b0b0b;border:1.5px solid rgba(214,0,28,.35);text-decoration:none;font-weight:900;font-size:11px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.hnote{font-size:11px;color:var(--M);font-style:italic}
+/* TABS */
+.tabbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 10px}
+.tab{border:1.5px solid rgba(11,11,11,.15);background:#fff;color:#0b0b0b;padding:10px 17px;border-radius:999px;cursor:pointer;font-weight:900;letter-spacing:.09em;text-transform:uppercase;font-size:11px;transition:all .16s;white-space:nowrap}
+.tab:hover{background:rgba(214,0,28,.04);border-color:rgba(214,0,28,.35)}
+.tab-on{background:linear-gradient(90deg,var(--R),var(--R2))!important;color:#fff!important;border-color:transparent!important;box-shadow:0 8px 20px rgba(214,0,28,.20)}
+.panel{display:none}.panel-on{display:block}
+/* SECTION HEADS */
+.shead{text-align:center;margin:26px auto 14px;max-width:780px}
+.skick{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(11,11,11,.46);font-weight:900;margin-bottom:6px}
+.sh2{font-size:26px;font-weight:900;letter-spacing:-.012em;margin-bottom:6px}
+.ssub{font-size:11px;color:rgba(11,11,11,.60);font-weight:700;letter-spacing:.07em}
+/* CARDS */
+.card{background:var(--W);border:1px solid var(--L);border-radius:16px;padding:18px;margin-top:12px}
+.ctop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.ch3{font-size:16px;font-weight:900;margin-bottom:3px}
+.csub{font-size:12px;color:var(--M);line-height:1.5}
+.cacts{display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0}
+.fcard{background:linear-gradient(155deg,rgba(214,0,28,.025),rgba(0,0,0,.005));border:1px solid var(--L);border-radius:16px;padding:18px}
+.ficon{font-size:28px;display:block;margin-bottom:8px}
+.ftitle{font-size:15px;font-weight:900;margin-bottom:4px}
+.fsub{font-size:12px;color:rgba(11,11,11,.62);line-height:1.5;margin-bottom:10px}
+/* LAYOUT */
+.divider{height:1px;background:var(--L);margin:14px 0}
+.stitle{font-weight:900;letter-spacing:.10em;text-transform:uppercase;font-size:10px;color:rgba(11,11,11,.70);margin-bottom:6px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+/* FIELDS */
+.field{min-width:0}
+.field label{display:block;font-size:11px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:rgba(11,11,11,.78);margin-bottom:5px}
+input[type="number"],select{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid rgba(11,11,11,.17);background:#fff;color:#0b0b0b;font-size:13px;outline:none}
+input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type="number"]{-moz-appearance:textfield}
+input:focus,select:focus{border-color:var(--R);box-shadow:0 0 0 3px rgba(214,0,28,.09)}
+input::placeholder{color:rgba(11,11,11,.28)}
+.pfx{display:flex;align-items:stretch}
+.pfx span{padding:10px 11px;border:1.5px solid rgba(11,11,11,.17);border-right:none;border-radius:10px 0 0 10px;background:rgba(0,0,0,.035);font-weight:900;display:flex;align-items:center;flex-shrink:0;font-size:13px}
+.pfx input{border-radius:0 10px 10px 0}
+.hint{font-size:11px;color:var(--M);margin-top:5px;line-height:1.4}
+.warn{font-size:11px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:6px 10px;margin-top:5px;line-height:1.4}
+.ebox{margin-top:12px;padding:12px 14px;border-radius:10px;border:1px solid rgba(214,0,28,.32);background:rgba(214,0,28,.05);font-size:12px;color:#9f0014;line-height:1.6}
+/* BUTTONS */
+.bigbtn{width:100%;height:52px;border:none;background:linear-gradient(90deg,var(--R),var(--R2));color:#fff;border-radius:999px;cursor:pointer;font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:12px;box-shadow:0 10px 24px rgba(214,0,28,.22);transition:transform .15s,box-shadow .15s;display:flex;align-items:center;justify-content:center;margin-top:16px}
+.bigbtn:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(214,0,28,.30)}
+.bigbtn:active{transform:translateY(0)}
+.ghost{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 13px;border-radius:999px;background:#fff;color:#0b0b0b;border:1.5px solid rgba(214,0,28,.38);cursor:pointer;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:10px;white-space:nowrap;transition:all .15s}
+.ghost:hover{background:rgba(214,0,28,.05);border-color:var(--R)}
+/* METRICS */
+.m6{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;margin-top:8px}
+.m3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px}
+.mbox{border:1px solid var(--L);border-radius:12px;padding:12px 13px;background:#fff}
+.mbox-red{border-color:rgba(214,0,28,.20);background:rgba(214,0,28,.025)}
+.mbox span{display:block;font-size:10px;color:rgba(11,11,11,.48);text-transform:uppercase;letter-spacing:.09em;font-weight:900;line-height:1.3}
+.mbox strong{display:block;margin-top:6px;font-size:15px;font-weight:900;line-height:1.2}
+/* VERDICT */
+.verdict{padding:11px 15px;border-radius:10px;font-size:13px;font-weight:700;line-height:1.6;margin-top:12px}
+.v-ok{background:rgba(4,120,87,.07);border-left:3px solid #047857;color:#065f46}
+.v-warn{background:rgba(214,0,28,.06);border-left:3px solid var(--R);color:#7f1d1d}
+/* CHARTS */
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.chartbox{background:#fff;border:1px solid var(--L);border-radius:14px;padding:14px}
+.ctitle{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;color:rgba(11,11,11,.68);margin-bottom:10px}
+/* TABLE */
+.twrap{margin-top:10px;max-height:400px;overflow:auto;border-radius:10px;border:1px solid var(--L)}
+table{width:100%;border-collapse:collapse;font-size:11px}
+thead{position:sticky;top:0;background:#f8f9fa;z-index:2}
+th{padding:9px 10px;border-bottom:1px solid rgba(11,11,11,.10);text-align:right;white-space:nowrap;font-size:10px;letter-spacing:.04em;text-transform:uppercase;font-weight:900;color:rgba(11,11,11,.58)}
+th:first-child{text-align:left}
+td{padding:8px 10px;border-bottom:1px solid rgba(11,11,11,.06);text-align:right;white-space:nowrap}
+td:first-child{text-align:left}
+tbody tr:nth-child(even){background:#fafafa}
+tbody tr:hover{background:rgba(214,0,28,.03)}
+/* FOOTER */
+.footer{margin-top:28px;padding:20px 0 8px;border-top:1px solid var(--L)}
+.fhead{text-align:center;margin-bottom:16px}
+.fkick{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:rgba(11,11,11,.40);font-weight:900;margin-bottom:4px}
+.ftit{font-size:15px;font-weight:900}
+.fcols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:14px}
+.fcol{font-size:11px;line-height:1.65;color:rgba(11,11,11,.60)}
+.fcol strong{display:block;font-weight:900;color:#0b0b0b;font-size:12px;margin-bottom:3px}
+.flegal{font-size:10px;color:rgba(11,11,11,.42);line-height:1.6;padding-top:10px;border-top:1px solid rgba(11,11,11,.07)}
+a.lnk{color:var(--R);font-weight:900;text-decoration:underline;text-underline-offset:2px}
+/* RESPONSIVE */
+@media(max-width:900px){
+  .g3{grid-template-columns:1fr 1fr}
+  .m6{grid-template-columns:repeat(3,1fr)!important}
+  .charts{grid-template-columns:1fr!important}
+}
+@media(max-width:580px){
+  .g2,.g3{grid-template-columns:1fr}
+  .m6{grid-template-columns:1fr 1fr!important}
+  .m3{grid-template-columns:1fr!important}
+  .h1{font-size:26px}
+  .ctop{flex-direction:column}
+  .fcols{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">M O R T G A G E S &nbsp;·&nbsp; O N T A R I O &nbsp;·&nbsp; C A N A D A</p>
+    <h1 class="h1">CANADIAN MORTGAGE<br>CALCULATOR SUITE</h1>
+    <p class="hdesc">Professional mortgage math with accurate Canadian semi-annual compounding, real CMHC rules, OSFI stress testing, GDS/TDS ratios, full amortization schedule, and 45+ verified Ontario property tax rates.</p>
+    <div class="badges">
+      <span class="badge">✓ CANADIAN INTEREST ACT</span>
+      <span class="badge">✓ CMHC DEC 2024 RULES</span>
+      <span class="badge">✓ OSFI STRESS TEST 2026</span>
+      <span class="badge">✓ 45+ ONTARIO CITIES 2025</span>
+    </div>
+    <div class="hbtns">
+      <a class="btnred" href="https://wa.me/message/GJM3ZNDU6DHBJ1" target="_blank" rel="noopener">💬 Get Pre-Approved</a>
+      <a class="btnghost-a" href="https://wa.me/message/GJM3ZNDU6DHBJ1" target="_blank" rel="noopener">Book a 30-Min Call</a>
+    </div>
+    <p class="hnote">Quick pre-approvals &nbsp;·&nbsp; 30+ lenders &nbsp;·&nbsp; No obligation</p>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabbar">
+  <button class="tab tab-on" data-panel="p1" type="button">📊 Payment Calculator</button>
+  <button class="tab" data-panel="p2" type="button">📐 GDS / TDS Ratios</button>
+  <button class="tab" data-panel="p3" type="button">🏆 Max Mortgage</button>
+</nav>
+
+<!-- ══════════════ PANEL 1: PAYMENT ══════════════ -->
+<div class="panel panel-on" id="p1">
+  <div class="shead">
+    <p class="skick">C A L C U L A T E &nbsp; Y O U R &nbsp; M O R T G A G E</p>
+    <h2 class="sh2">Payment Calculator</h2>
+    <p class="ssub">CANADIAN SEMI-ANNUAL COMPOUNDING &nbsp;·&nbsp; FULL AMORTIZATION &nbsp;·&nbsp; CMHC INCLUDED</p>
+  </div>
+  <div class="card">
+    <div class="ctop">
+      <div><h3 class="ch3">Mortgage Details</h3><p class="csub">All math uses Canadian semi-annual compounding per the Interest Act of Canada.</p></div>
+      <div class="cacts">
+        <button id="btnToggle" class="ghost" type="button">Toggle Schedule</button>
+        <button id="btnCSV"    class="ghost" type="button">Export CSV</button>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="field">
+        <label>Home Price</label>
+        <div class="pfx"><span>$</span><input id="p_price" type="number" min="0" placeholder="750000"></div>
+      </div>
+      <div class="field">
+        <label>Down Payment (%)</label>
+        <input id="p_down" type="number" min="0" max="100" step="0.1" placeholder="10">
+        <div id="p_damt" class="hint"></div>
+        <div id="p_dwarn" class="warn" style="display:none;"></div>
+      </div>
+      <div class="field">
+        <label>Amortization (years)</label>
+        <input id="p_amort" type="number" min="1" max="30" step="1" placeholder="25">
+        <div class="hint">Max 25 yrs insured · Up to 30 yrs uninsured</div>
+      </div>
+      <div class="field">
+        <label>Annual Interest Rate (%)</label>
+        <input id="p_rate" type="number" min="0.1" max="25" step="0.05" placeholder="5.50">
+        <div class="hint">e.g. 5.50 for 5.50% &nbsp;·&nbsp; Semi-annual compounding applied</div>
+      </div>
+      <div class="field">
+        <label>Payment Frequency</label>
+        <select id="p_freq">
+          <option value="12" selected>Monthly (12×/yr)</option>
+          <option value="26">Bi-weekly (26×/yr)</option>
+          <option value="52">Weekly (52×/yr)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>CMHC Handling</label>
+        <select id="p_cmhc">
+          <option value="add" selected>Add premium to mortgage (financed)</option>
+          <option value="sep">Show separately — paid upfront</option>
+          <option value="no">No CMHC / not applicable</option>
+        </select>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p class="stitle">Housing Costs — Used in GDS Quick Check</p>
+    <div class="g3" style="margin-top:10px;">
+      <div class="field">
+        <label>Monthly Heat</label>
+        <div class="pfx"><span>$</span><input id="p_heat" type="number" min="0" placeholder="150"></div>
+        <div class="hint">Heating only. Hydro excluded per industry standard.</div>
+      </div>
+      <div class="field">
+        <label>Condo Fees / Month</label>
+        <div class="pfx"><span>$</span><input id="p_condo" type="number" min="0" placeholder="0"></div>
+        <div class="hint">50% of condo fees used in GDS/TDS per CMHC.</div>
+      </div>
+      <div class="field">
+        <label>Monthly Property Tax</label>
+        <div class="pfx"><span>$</span><input id="p_tax" type="number" min="0" placeholder="0"></div>
+        <div class="hint">Use Property Tax tool below → Copy button.</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p class="stitle">Optional: Lump-Sum Prepayment</p>
+    <div class="g2" style="margin-top:10px;">
+      <div class="field">
+        <label>Lump-Sum Amount</label>
+        <div class="pfx"><span>$</span><input id="p_lump" type="number" min="0" placeholder="0"></div>
+        <div class="hint">Most mortgages allow 10–20% per year. Check your terms.</div>
+      </div>
+      <div class="field">
+        <label>Prepayment Timing</label>
+        <select id="p_lw">
+          <option value="none" selected>None</option>
+          <option value="annual">Once per year (each year-end)</option>
+          <option value="y1">One-time — end of Year 1</option>
+          <option value="y2">One-time — end of Year 2</option>
+          <option value="y3">One-time — end of Year 3</option>
+          <option value="y5">One-time — end of Year 5</option>
+        </select>
+      </div>
+    </div>
+    <button id="btnPay" class="bigbtn" type="button">▶ &nbsp;CALCULATE MORTGAGE PAYMENT</button>
+    <div id="p_err" class="ebox" style="display:none;"></div>
+  </div>
+
+  <!-- CMHC + TAX -->
+  <div class="shead" style="margin-top:26px;">
+    <p class="skick">A D V A N C E D &nbsp; T O O L S</p>
+    <h2 class="sh2">CMHC Premium &amp; Property Tax</h2>
+    <p class="ssub">VERIFIED DEC 2024 CMHC RATES &nbsp;·&nbsp; 45+ ONTARIO CITIES 2025</p>
+  </div>
+  <div class="g2">
+    <div class="fcard">
+      <span class="ficon">🛡️</span>
+      <h3 class="ftitle">CMHC Premium Estimator</h3>
+      <p class="fsub">Effective Dec 15, 2024 — insurable cap raised to $1.5M. Homes ≥$1.5M require 20% down; CMHC not available.</p>
+      <div class="g2" style="margin-top:10px;">
+        <div class="field">
+          <label>Non-Traditional Down Payment?</label>
+          <select id="c_nt">
+            <option value="no" selected>No — standard premium</option>
+            <option value="yes">Yes — +0.50% surcharge</option>
+          </select>
+          <div class="hint">Borrowed, gifted (non-family), or unverified funds.</div>
+        </div>
+        <div class="field">
+          <label>Province (PST on premium)</label>
+          <select id="c_prov">
+            <option value="ON" selected>Ontario — 8% PST</option>
+            <option value="QC">Quebec — 9% PST</option>
+            <option value="SK">Saskatchewan — 6% PST</option>
+            <option value="XX">Other — No PST</option>
+          </select>
+          <div class="hint">PST paid upfront at closing — not financeable.</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <button id="btnCMHC" class="ghost" type="button">📋 Estimate CMHC Premium</button>
+      </div>
+      <div class="m3" style="margin-top:12px;">
+        <div class="mbox"><span>LTV Ratio</span><strong id="c_ltv">—</strong></div>
+        <div class="mbox"><span>Premium Rate</span><strong id="c_rate">—</strong></div>
+        <div class="mbox"><span>Premium $</span><strong id="c_amt">—</strong></div>
+      </div>
+      <div id="c_note" class="hint" style="margin-top:8px;line-height:1.6;"></div>
+      <div class="divider"></div>
+      <p class="stitle">CMHC Rate Table — Dec 2024</p>
+      <table style="margin-top:8px;">
+        <thead><tr><th style="text-align:left;">LTV Range</th><th>Standard</th><th>Non-Traditional</th></tr></thead>
+        <tbody>
+          <tr><td>Up to 65%</td><td>0.60%</td><td>1.10%</td></tr>
+          <tr><td>65.01%–75%</td><td>1.70%</td><td>2.20%</td></tr>
+          <tr><td>75.01%–80%</td><td>2.40%</td><td>2.90%</td></tr>
+          <tr><td>80.01%–85%</td><td>2.80%</td><td>3.30%</td></tr>
+          <tr><td>85.01%–90%</td><td>3.10%</td><td>3.60%</td></tr>
+          <tr><td>90.01%–95%</td><td>4.00%</td><td>4.50%</td></tr>
+        </tbody>
+      </table>
+      <div class="hint" style="margin-top:6px;">Source: CMHC official rates Dec 15, 2024. Premium added to mortgage. PST on premium paid upfront — not financeable.</div>
+    </div>
+    <div class="fcard">
+      <span class="ficon">🏠</span>
+      <h3 class="ftitle">Ontario Property Tax Estimator</h3>
+      <p class="fsub">Select a city to auto-fill 2025 rate, or enter custom rate. Tap "Copy → Payment" to sync to calculator.</p>
+      <div class="g2" style="margin-top:10px;">
+        <div class="field">
+          <label>City / Municipality</label>
+          <select id="t_city"><option value="">— Select Ontario City —</option></select>
+        </div>
+        <div class="field">
+          <label>Annual Tax Rate (%)</label>
+          <input id="t_rate" type="number" step="0.0001" min="0" placeholder="e.g. 0.6600">
+          <div id="t_hint" class="hint"></div>
+        </div>
+        <div class="field">
+          <label>Assessed / MPAC Value</label>
+          <div class="pfx"><span>$</span><input id="t_assessed" type="number" min="0" placeholder="Blank = use Home Price"></div>
+        </div>
+        <div class="field">
+          <label>Custom Override Value</label>
+          <div class="pfx"><span>$</span><input id="t_custom" type="number" min="0" placeholder="Optional"></div>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button id="btnTax"  class="ghost" type="button">📋 Estimate Tax</button>
+        <button id="btnCopy" class="ghost" type="button">📌 Copy → Payment Tab</button>
+      </div>
+      <div class="m3" style="margin-top:12px;">
+        <div class="mbox"><span>Monthly Tax</span><strong id="t_mo">—</strong></div>
+        <div class="mbox"><span>Annual Tax</span><strong id="t_ann">—</strong></div>
+        <div class="mbox"><span>Rate Used</span><strong id="t_rout">—</strong></div>
+      </div>
+      <div class="hint" style="margin-top:8px;line-height:1.6;">
+        <strong>Lowest:</strong> Toronto 0.66% · Markham 0.67% · Richmond Hill 0.69%<br>
+        <strong>Highest:</strong> Windsor 1.78% · Chatham-Kent 2.02% · Timmins 2.50%<br>
+        Actual bills based on MPAC assessed value — often lower than market price. Source: WOWA 2025.
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="p_results" style="display:none;margin-top:26px;">
+    <div class="shead">
+      <p class="skick">Y O U R &nbsp; R E S U L T S</p>
+      <h2 class="sh2">Payment Summary</h2>
+      <p class="ssub">P+I PAYMENT &nbsp;·&nbsp; FULL HOUSING COST &nbsp;·&nbsp; GDS CHECK &nbsp;·&nbsp; AMORTIZATION CHARTS</p>
+    </div>
+    <div class="card">
+      <div class="m6">
+        <div class="mbox"><span>Base Mortgage Loan</span><strong id="r_base">—</strong></div>
+        <div class="mbox"><span>CMHC Premium</span><strong id="r_cmhc">—</strong></div>
+        <div class="mbox"><span>Total Financed</span><strong id="r_total">—</strong></div>
+        <div class="mbox mbox-red"><span>Your Payment</span><strong id="r_pmt">—</strong></div>
+        <div class="mbox"><span>Monthly Housing Total</span><strong id="r_housing">—</strong></div>
+        <div class="mbox"><span>Mortgage Paid Off</span><strong id="r_payoff">—</strong></div>
+      </div>
+      <div class="divider"></div>
+      <div class="m3">
+        <div class="mbox"><span>Total Interest Paid</span><strong id="r_tint">—</strong></div>
+        <div class="mbox"><span>Effective Annual Rate</span><strong id="r_eff">—</strong></div>
+        <div class="mbox"><span>Interest / Principal</span><strong id="r_irat">—</strong></div>
+      </div>
+      <div class="divider"></div>
+      <p class="stitle">GDS Quick Check <span style="font-weight:400;text-transform:none;letter-spacing:0;">(based on $10,000/mo income proxy)</span></p>
+      <div class="m3" style="margin-top:8px;">
+        <div class="mbox"><span>Monthly Housing Costs</span><strong id="r_gnum">—</strong></div>
+        <div class="mbox"><span>GDS at $10K/mo</span><strong id="r_gpct">—</strong></div>
+        <div class="mbox"><span>CMHC GDS Guideline</span><strong style="color:#047857;">≤ 39%</strong></div>
+      </div>
+      <div class="hint" style="margin-top:8px;">For your actual GDS/TDS with real income and debts, use the <strong>GDS / TDS tab</strong> above.</div>
+      <div class="hint" style="margin-top:8px;">💬 Ready for your pre-approval? <a class="lnk" href="https://wa.me/message/GJM3ZNDU6DHBJ1" target="_blank" rel="noopener">Message FINANC1FYD on WhatsApp</a> — we shop 30+ lenders for your best rate.</div>
+    </div>
+
+    <div class="charts">
+      <div class="chartbox">
+        <p class="ctitle">First Payment — Principal vs. Interest Split</p>
+        <svg id="svg1" viewBox="0 0 520 290" width="100%" height="290"></svg>
+      </div>
+      <div class="chartbox">
+        <p class="ctitle">Monthly Housing Cashflow — All Costs</p>
+        <svg id="svg2" viewBox="0 0 520 290" width="100%" height="290"></svg>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <p class="stitle">Balance Reduction Over Time</p>
+      <svg id="svg3" viewBox="0 0 880 190" width="100%" height="190" style="margin-top:10px;"></svg>
+    </div>
+
+    <div class="card" id="p_sbox" style="display:none;margin-top:14px;">
+      <div class="ctop">
+        <div><h3 class="ch3">Amortization Schedule</h3><p class="csub">25 rows loaded at a time for performance.</p></div>
+        <div class="cacts">
+          <button id="btnMore" class="ghost" type="button">Next 25</button>
+          <button id="btnAll"  class="ghost" type="button">Show All</button>
+        </div>
+      </div>
+      <div class="twrap">
+        <table>
+          <thead><tr><th style="text-align:left;">#</th><th>Year</th><th>Payment</th><th>Interest</th><th>Principal</th><th>Lump</th><th>Tax</th><th>Heat</th><th>Condo½</th><th>Total Out</th><th>Balance</th></tr></thead>
+          <tbody id="p_tbody"></tbody>
+        </table>
+      </div>
+      <div class="hint" style="margin-top:8px;">Tax/heat/condo are cashflow items only — do not reduce mortgage balance. Lump sums reduce principal directly.</div>
+    </div>
+  </div>
+</div><!-- /p1 -->
+
+<!-- ══════════════ PANEL 2: GDS/TDS ══════════════ -->
+<div class="panel" id="p2">
+  <div class="shead">
+    <p class="skick">A F F O R D A B I L I T Y &nbsp; A N A L Y S I S</p>
+    <h2 class="sh2">GDS / TDS Ratio Calculator</h2>
+    <p class="ssub">CMHC GUIDELINES &nbsp;·&nbsp; 50% CONDO RULE &nbsp;·&nbsp; REVOLVING 3% PROXY &nbsp;·&nbsp; NO HYDRO</p>
+  </div>
+  <div class="card">
+    <div class="ctop">
+      <div><h3 class="ch3">Income &amp; Debts</h3><p class="csub">GDS = housing ÷ income. TDS = (housing + all debts) ÷ income. CMHC: GDS ≤39%, TDS ≤44%.</p></div>
+    </div>
+    <div class="g3">
+      <div class="field">
+        <label>Gross Monthly Income</label>
+        <div class="pfx"><span>$</span><input id="a_inc" type="number" min="0" placeholder="10000"></div>
+        <div class="hint">Before-tax household income. Include all applicants.</div>
+      </div>
+      <div class="field">
+        <label>Monthly Mortgage P+I</label>
+        <div class="pfx"><span>$</span><input id="a_mtg" type="number" min="0" placeholder="0"></div>
+        <div class="hint">Auto-fills from Payment tab after calculating.</div>
+      </div>
+      <div class="field">
+        <label>Monthly Property Tax</label>
+        <div class="pfx"><span>$</span><input id="a_tax" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="field">
+        <label>Monthly Heat</label>
+        <div class="pfx"><span>$</span><input id="a_heat" type="number" min="0" placeholder="150"></div>
+        <div class="hint">Heating only. Hydro excluded per CMHC.</div>
+      </div>
+      <div class="field">
+        <label>Condo Fees / Month</label>
+        <div class="pfx"><span>$</span><input id="a_condo" type="number" min="0" placeholder="0"></div>
+        <div class="hint">50% included in GDS/TDS per CMHC rules.</div>
+      </div>
+      <div class="field">
+        <label>Other Monthly Debts</label>
+        <div class="pfx"><span>$</span><input id="a_debts" type="number" min="0" placeholder="0"></div>
+        <div class="hint">Car, student, personal loans. NOT credit cards.</div>
+      </div>
+      <div class="field">
+        <label>Revolving Balance (CC/LOC)</label>
+        <div class="pfx"><span>$</span><input id="a_rb" type="number" min="0" placeholder="0"></div>
+        <div class="hint">3% monthly proxy applied if no payment entered.</div>
+      </div>
+      <div class="field">
+        <label>Revolving Monthly Payment</label>
+        <div class="pfx"><span>$</span><input id="a_rp" type="number" min="0" placeholder="0"></div>
+        <div class="hint">Enter actual payment or leave 0 for proxy.</div>
+      </div>
+    </div>
+    <button id="btnAff" class="bigbtn" type="button">▶ &nbsp;CALCULATE GDS / TDS</button>
+    <div id="a_err" class="ebox" style="display:none;"></div>
+  </div>
+  <div id="a_results" style="display:none;margin-top:14px;">
+    <div class="card">
+      <div class="m6">
+        <div class="mbox"><span>Housing Costs</span><strong id="a_house">—</strong></div>
+        <div class="mbox"><span>GDS Ratio</span><strong id="a_gds">—</strong></div>
+        <div class="mbox"><span>GDS Guideline</span><strong style="color:#047857;">≤ 39%</strong></div>
+        <div class="mbox"><span>All Debts</span><strong id="a_debt">—</strong></div>
+        <div class="mbox"><span>TDS Ratio</span><strong id="a_tds">—</strong></div>
+        <div class="mbox"><span>TDS Guideline</span><strong style="color:#047857;">≤ 44%</strong></div>
+      </div>
+      <div id="a_verd" class="verdict"></div>
+      <div class="hint" style="margin-top:10px;">
+        <strong>GDS</strong> = (P+I + Tax + Heat + 50% Condo) ÷ Gross Monthly Income<br>
+        <strong>TDS</strong> = (GDS numerator + Other Loans + Revolving payment) ÷ Gross Monthly Income<br>
+        Some uninsured lenders allow GDS up to 42% / TDS up to 47% with strong compensating factors.
+        <a class="lnk" href="https://wa.me/message/GJM3ZNDU6DHBJ1" target="_blank" rel="noopener">Contact FINANC1FYD</a> for a full lender comparison.
+      </div>
+    </div>
+  </div>
+</div><!-- /p2 -->
+
+<!-- ══════════════ PANEL 3: MAX MORTGAGE ══════════════ -->
+<div class="panel" id="p3">
+  <div class="shead">
+    <p class="skick">M A X I M U M &nbsp; Q U A L I F Y I N G &nbsp; A M O U N T</p>
+    <h2 class="sh2">Max Mortgage Estimator</h2>
+    <p class="ssub">INCOME → GDS/TDS LIMIT → MAX P+I → MAX MORTGAGE &nbsp;·&nbsp; OSFI STRESS TEST 2026</p>
+  </div>
+  <div class="card">
+    <div class="ctop">
+      <div><h3 class="ch3">Your Financial Profile</h3><p class="csub">Math-based estimate only — not an approval. Actual qualification depends on full lender underwriting.</p></div>
+    </div>
+    <div class="g3">
+      <div class="field">
+        <label>Gross Monthly Income</label>
+        <div class="pfx"><span>$</span><input id="m_inc" type="number" min="0" placeholder="10000"></div>
+      </div>
+      <div class="field">
+        <label>Monthly Property Tax</label>
+        <div class="pfx"><span>$</span><input id="m_tax" type="number" min="0" placeholder="500"></div>
+      </div>
+      <div class="field">
+        <label>Monthly Heat</label>
+        <div class="pfx"><span>$</span><input id="m_heat" type="number" min="0" placeholder="150"></div>
+      </div>
+      <div class="field">
+        <label>Condo Fees / Month</label>
+        <div class="pfx"><span>$</span><input id="m_condo" type="number" min="0" placeholder="0"></div>
+        <div class="hint">50% used in GDS/TDS.</div>
+      </div>
+      <div class="field">
+        <label>Other Monthly Debts</label>
+        <div class="pfx"><span>$</span><input id="m_debts" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="field">
+        <label>Revolving Balance</label>
+        <div class="pfx"><span>$</span><input id="m_rb" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="field">
+        <label>Revolving Monthly Payment</label>
+        <div class="pfx"><span>$</span><input id="m_rp" type="number" min="0" placeholder="0"></div>
+        <div class="hint">Leave 0 for 3% proxy.</div>
+      </div>
+      <div class="field">
+        <label>GDS Limit (%)</label>
+        <input id="m_gl" type="number" min="1" max="55" step="0.5" placeholder="39">
+        <div class="hint">CMHC standard: 39%</div>
+      </div>
+      <div class="field">
+        <label>TDS Limit (%)</label>
+        <input id="m_tl" type="number" min="1" max="60" step="0.5" placeholder="44">
+        <div class="hint">CMHC standard: 44%</div>
+      </div>
+      <div class="field">
+        <label>Amortization (years)</label>
+        <input id="m_amort" type="number" min="1" max="30" step="1" placeholder="25">
+      </div>
+      <div class="field">
+        <label>Payment Frequency</label>
+        <select id="m_freq">
+          <option value="12" selected>Monthly (12×/yr)</option>
+          <option value="26">Bi-weekly (26×/yr)</option>
+          <option value="52">Weekly (52×/yr)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Contract Interest Rate (%)</label>
+        <input id="m_rate" type="number" min="0.1" max="25" step="0.05" placeholder="5.50">
+        <div class="hint">Annual rate e.g. 5.50</div>
+      </div>
+      <div class="field">
+        <label>Apply OSFI Stress Test?</label>
+        <select id="m_stress">
+          <option value="yes" selected>Yes — max(contract + 2%, 5.25%)</option>
+          <option value="no">No — use contract rate only</option>
+        </select>
+        <div class="hint">OSFI B-20: required at banks. Straight renewals exempt Nov 2024.</div>
+      </div>
+    </div>
+    <button id="btnMax" class="bigbtn" type="button">▶ &nbsp;CALCULATE MAX MORTGAGE</button>
+    <div id="m_err" class="ebox" style="display:none;"></div>
+  </div>
+  <div id="m_results" style="display:none;margin-top:14px;">
+    <div class="card">
+      <div class="m6">
+        <div class="mbox"><span>Limiting Factor</span><strong id="m_lim">—</strong></div>
+        <div class="mbox"><span>Contract Rate</span><strong id="m_cr">—</strong></div>
+        <div class="mbox"><span>Qualifying Rate</span><strong id="m_qr">—</strong></div>
+        <div class="mbox mbox-red"><span>Max P+I Payment</span><strong id="m_pmt">—</strong></div>
+        <div class="mbox mbox-red"><span>Max Mortgage</span><strong id="m_amt">—</strong></div>
+        <div class="mbox"><span>Pre-Approval</span><strong><a class="lnk" href="https://wa.me/message/GJM3ZNDU6DHBJ1" target="_blank" rel="noopener">Apply Now →</a></strong></div>
+      </div>
+      <div class="hint" style="margin-top:10px;"><strong>Max purchase price</strong> = max mortgage + your down payment. OSFI B-20 stress test: max(contract + 2%, 5.25%) — confirmed unchanged for 2026. Always obtain a formal pre-approval for final numbers.</div>
+    </div>
+  </div>
+</div><!-- /p3 -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="fhead">
+    <p class="fkick">R E G U L A T O R Y &nbsp;&amp;&nbsp; L E G A L &nbsp; D I S C L O S U R E S</p>
+    <p class="ftit">STRAIGHTFORWARD, COMPLIANT MORTGAGE ADVICE</p>
+  </div>
+  <div class="fcols">
+    <div class="fcol"><strong>Licensed Brokerage</strong><p>FINANC1FYD operates under FSRA Licence M25001127, authorized by 8Twelve Mortgage Corp. (FSRA Brokerage Licence 13072). Regulated under Ontario's MBLAA 2006.</p></div>
+    <div class="fcol"><strong>Broker, Not Lender</strong><p>We arrange mortgage loans with third-party lenders. On most prime files the lender pays our compensation. Any fee payable by you will be disclosed in writing before you proceed.</p></div>
+    <div class="fcol"><strong>No Guarantees</strong><p>All calculations are for general information only — not an offer to lend, approval, or guarantee. Actual qualification depends on full lender underwriting.</p></div>
+  </div>
+  <div class="flegal">Calculations use Canadian semi-annual compounding per the Interest Act of Canada. CMHC rates effective Dec 15, 2024 — $1.5M insurable cap, PST: ON 8%, QC 9%, SK 6% (upfront at closing, not financeable). Property tax estimates per WOWA 2025 verified municipal rates; actual bills based on MPAC assessed value. OSFI stress test: max(contract+2%, 5.25%) confirmed unchanged 2026. OSFI LTI 4.5× rule permanent 2025. Straight-switch renewals exempt from stress testing as of November 2024. Nothing herein constitutes financial, legal, tax, or mortgage advice. FINANC1FYD is licensed in Ontario. E.&amp;O.E.</div>
+</footer>
+
+</div><!-- /shell -->
+
+<script>
+(function(){
+'use strict';
+function el(id){return document.getElementById(id);}
+function val(id){return el(id)?el(id).value:'';}
+function n0(id){var v=parseFloat(val(id));return isFinite(v)?Math.max(0,v):0;}
+function set(id,t){if(el(id))el(id).textContent=t;}
+function show(id){if(el(id))el(id).style.display='block';}
+function hide(id){if(el(id))el(id).style.display='none';}
+function $e(id,msg){if(el(id)){el(id).style.display='block';el(id).innerHTML=msg;}}
+function $h(id){if(el(id)){el(id).style.display='none';el(id).textContent='';}}
+function fmt(n){return isFinite(n)?'$'+Math.abs(n).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';}
+
+/* ── Canadian Interest Act semi-annual compounding ── */
+function perRate(ann,n){
+  var s=ann/100/2,e=Math.pow(1+s,2)-1;
+  return Math.pow(1+e,1/n)-1;
+}
+function pmt(P,ann,N,n){
+  if(P<=0||N<=0)return 0;
+  var r=perRate(ann,n);
+  if(r<1e-12)return P/N;
+  var pw=Math.pow(1+r,N);
+  return P*r*pw/(pw-1);
+}
+function principal(p,ann,N,n){
+  var r=perRate(ann,n);
+  if(r<1e-12)return p*N;
+  var pw=Math.pow(1+r,N);
+  return p*(pw-1)/(r*pw);
+}
+
+/* ── CMHC rates (Dec 2024) ── */
+function cmhcRate(ltv,nt){
+  var b=ltv<=65?0.60:ltv<=75?1.70:ltv<=80?2.40:ltv<=85?2.80:ltv<=90?3.10:4.00;
+  return nt?b+0.50:b;
+}
+
+/* ── Min down ── */
+function minDown(p){
+  if(p>=1500000)return p*0.20;
+  if(p<=500000) return p*0.05;
+  return 25000+(p-500000)*0.10;
+}
+
+/* ── TABS ── */
+var TABS=document.querySelectorAll('.tab');
+var PANELS=document.querySelectorAll('.panel');
+TABS.forEach(function(b){
+  b.addEventListener('click',function(){
+    TABS.forEach(function(x){x.classList.remove('tab-on');});
+    PANELS.forEach(function(x){x.classList.remove('panel-on');});
+    b.classList.add('tab-on');
+    var t=el(b.getAttribute('data-panel'));
+    if(t)t.classList.add('panel-on');
+  });
+});
+function goP1(){
+  TABS.forEach(function(x){x.classList.remove('tab-on');});
+  PANELS.forEach(function(x){x.classList.remove('panel-on');});
+  var bt=document.querySelector('.tab[data-panel="p1"]');
+  if(bt)bt.classList.add('tab-on');
+  if(el('p1'))el('p1').classList.add('panel-on');
+}
+
+/* ── Live down payment display ── */
+function liveDown(){
+  var price=n0('p_price'),dpPct=n0('p_down');
+  var da=el('p_damt'),dw=el('p_dwarn');
+  if(!da)return;
+  if(!price||!dpPct){da.textContent='';if(dw)dw.style.display='none';return;}
+  var dpv=price*dpPct/100;
+  da.textContent='Down payment: '+fmt(dpv);
+  var mn=minDown(price);
+  if(dw){
+    if(dpv<mn-0.01){
+      dw.style.display='block';
+      dw.textContent='Minimum required: '+fmt(mn)+' ('+((mn/price)*100).toFixed(2)+'%)'+(price>=1500000?' — ≥$1.5M: 20% required; CMHC not available':'');
+    }else dw.style.display='none';
+  }
+}
+if(el('p_price'))el('p_price').addEventListener('input',liveDown);
+if(el('p_down')) el('p_down').addEventListener('input',liveDown);
+
+/* ── Ontario Cities (WOWA 2025) ── */
+var CITIES=[
+  {n:'Toronto',r:0.6600},{n:'Mississauga',r:0.8300},{n:'Brampton',r:1.0400},
+  {n:'Markham',r:0.6700},{n:'Richmond Hill',r:0.6915},{n:'Vaughan',r:0.7500},
+  {n:'Aurora',r:0.8033},{n:'Newmarket',r:0.8413},{n:'Caledon',r:0.8415},
+  {n:'Oakville',r:0.8185},{n:'Burlington',r:0.8672},{n:'Milton',r:0.7336},
+  {n:'Halton Hills',r:0.8527},{n:'Pickering',r:1.1606},{n:'Ajax',r:1.1832},
+  {n:'Whitby',r:1.1994},{n:'Oshawa',r:1.3762},{n:'Clarington',r:1.2241},
+  {n:'Ottawa',r:1.1400},{n:'Kingston',r:1.4446},{n:'Belleville',r:1.7517},
+  {n:'Peterborough',r:1.5377},{n:'Kawartha Lakes',r:1.3759},{n:'Hamilton',r:1.2600},
+  {n:'St. Catharines',r:1.6316},{n:'Niagara Falls',r:1.5051},{n:'Welland',r:1.7572},
+  {n:'Brantford',r:1.3847},{n:'Kitchener',r:1.1930},{n:'Waterloo',r:1.2042},
+  {n:'Cambridge',r:1.3076},{n:'Guelph',r:1.2291},{n:'London',r:1.3600},
+  {n:'Sarnia',r:1.5965},{n:'Chatham-Kent',r:2.0179},{n:'Windsor',r:1.7800},
+  {n:'Barrie',r:1.2912},{n:'Collingwood',r:0.9700},{n:'Orillia',r:1.5100},
+  {n:'Sudbury',r:1.6495},{n:'Thunder Bay',r:1.7089},{n:'Sault Ste. Marie',r:1.7207},
+  {n:'North Bay',r:1.6643},{n:'Timmins',r:2.5000},
+  {n:'Whitchurch-Stouffville',r:0.7793},{n:'Stouffville',r:0.7793}
+];
+var tSel=el('t_city');
+if(tSel){
+  CITIES.forEach(function(c){
+    var o=document.createElement('option');
+    o.value=c.r;o.textContent=c.n+' — '+c.r.toFixed(4)+'%';
+    tSel.appendChild(o);
+  });
+  tSel.addEventListener('change',function(){
+    if(!tSel.value)return;
+    var r=parseFloat(tSel.value);
+    if(el('t_rate'))el('t_rate').value=r.toFixed(4);
+    var city=CITIES.find(function(c){return Math.abs(c.r-r)<0.0001;});
+    if(el('t_hint'))el('t_hint').textContent=city?city.n+' 2025 rate (WOWA verified)':'';
+  });
+}
+
+/* ── Tax Estimate ── */
+if(el('btnTax')){
+  el('btnTax').addEventListener('click',function(){
+    var rate=parseFloat(val('t_rate'));
+    var v=n0('t_custom')||n0('t_assessed')||n0('p_price');
+    if(!isFinite(rate)||rate<=0){alert('Please select a city or enter a tax rate.');return;}
+    if(!v){alert('Enter a value — or fill in Home Price on Payment tab.');return;}
+    var ann=v*rate/100,mo=ann/12;
+    set('t_mo',fmt(mo));set('t_ann',fmt(ann));set('t_rout',rate.toFixed(4)+'%');
+  });
+}
+
+/* ── Copy Tax → Payment Tab ── */
+if(el('btnCopy')){
+  el('btnCopy').addEventListener('click',function(){
+    var txt=el('t_mo')?el('t_mo').textContent:'—';
+    if(!txt||txt==='—'){alert('Run Estimate Tax first.');return;}
+    var mo=parseFloat(txt.replace(/[$,]/g,''));
+    if(isFinite(mo)&&el('p_tax'))el('p_tax').value=mo.toFixed(2);
+    goP1();
+    setTimeout(function(){if(el('p_tax'))el('p_tax').focus();},200);
+  });
+}
+
+/* ── CMHC Estimate ── */
+if(el('btnCMHC')){
+  el('btnCMHC').addEventListener('click',function(){
+    var price=n0('p_price'),dpPct=n0('p_down');
+    var nt=el('c_nt')?el('c_nt').value==='yes':false;
+    var prov=el('c_prov')?el('c_prov').value:'ON';
+    if(!price||!dpPct){alert('Enter Home Price and Down Payment % first.');return;}
+    var dpA=price*dpPct/100,base=price-dpA,ltv=(base/price)*100;
+    set('c_ltv',ltv.toFixed(2)+'%');
+    if(price>=1500000){set('c_rate','N/A');set('c_amt',fmt(0));set('c_note','Homes ≥$1.5M are NOT CMHC insurable (Dec 15, 2024). Minimum 20% down required.');return;}
+    if(dpPct<5){set('c_rate','N/A');set('c_amt','—');set('c_note','Minimum 5% down required. $500K–$1.5M: 5% on first $500K + 10% on remainder.');return;}
+    if(ltv<=80){set('c_rate','N/A');set('c_amt',fmt(0));set('c_note','Down payment ≥20% — CMHC insurance NOT required. No premium charged.');return;}
+    if(ltv>95){set('c_rate','Out of range');set('c_amt','—');set('c_note','LTV exceeds 95%. Maximum insurable LTV is 95% (minimum 5% down).');return;}
+    var pr=cmhcRate(ltv,nt),prem=base*pr/100;
+    set('c_rate',pr.toFixed(2)+'%');set('c_amt',fmt(prem));
+    var pstMap={ON:0.08,QC:0.09,SK:0.06};
+    var pstR=pstMap[prov]||0,pstA=prem*pstR;
+    var note='Premium '+fmt(prem)+' added to mortgage. ';
+    if(pstR>0)note+=prov+' PST ('+(pstR*100).toFixed(0)+'%) = '+fmt(pstA)+' — paid upfront at closing; cannot be financed.';
+    else note+='No PST in your selected province.';
+    if(nt)note+=' Non-traditional down payment +0.50% surcharge included.';
+    set('c_note',note);
+  });
+}
+
+/* ── Amortization Schedule ── */
+var SCHED=[],SS=0;
+function buildSched(P,ann,N,n,tax,heat,c50,lumpA,lumpW){
+  SCHED=[];
+  var r=perRate(ann,n),payment=pmt(P,ann,N,n),bal=P;
+  for(var i=1;i<=N&&bal>0.005;i++){
+    var ip=bal*r,pp=Math.min(payment-ip,bal);
+    if(pp<0)pp=0;
+    bal-=pp;if(bal<0.01)bal=0;
+    var lump=0,yr=Math.ceil(i/n);
+    var doL=(lumpW==='annual'&&i%n===0)||(lumpW==='y1'&&i===n)||(lumpW==='y2'&&i===n*2)||(lumpW==='y3'&&i===n*3)||(lumpW==='y5'&&i===n*5);
+    if(doL&&lumpA>0&&bal>0){lump=Math.min(lumpA,bal);bal-=lump;if(bal<0)bal=0;}
+    var out=payment+lump+tax+heat+c50;
+    SCHED.push({n:i,yr:yr,pmt:payment,int:ip,prin:pp,lump:lump,tax:tax,heat:heat,c50:c50,out:out,bal:Math.max(0,bal)});
+    if(bal<=0)break;
+  }
+}
+function renderSched(count){
+  var tb=el('p_tbody');if(!tb)return;
+  tb.innerHTML='';
+  var end=Math.min(count,SCHED.length);
+  for(var i=0;i<end;i++){
+    var r=SCHED[i];
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td>'+r.n+'</td><td>'+r.yr+'</td>'+
+      '<td>'+fmt(r.pmt)+'</td><td>'+fmt(r.int)+'</td><td>'+fmt(r.prin)+'</td>'+
+      '<td>'+(r.lump>0?fmt(r.lump):'—')+'</td>'+
+      '<td>'+fmt(r.tax)+'</td><td>'+fmt(r.heat)+'</td><td>'+fmt(r.c50)+'</td>'+
+      '<td>'+fmt(r.out)+'</td><td>'+fmt(r.bal)+'</td>';
+    tb.appendChild(tr);
+  }
+}
+if(el('btnMore'))el('btnMore').addEventListener('click',function(){SS=Math.min(SS+25,SCHED.length);renderSched(SS);});
+if(el('btnAll')) el('btnAll').addEventListener('click',function(){SS=SCHED.length;renderSched(SS);});
+if(el('btnToggle'))el('btnToggle').addEventListener('click',function(){var b=el('p_sbox');if(b)b.style.display=b.style.display==='block'?'none':'block';});
+if(el('btnCSV')){
+  el('btnCSV').addEventListener('click',function(){
+    if(!SCHED.length){alert('Calculate first.');return;}
+    var lines=['#,Year,Payment,Interest,Principal,Lump,Tax,Heat,Condo50%,TotalOut,Balance'];
+    SCHED.forEach(function(r){
+      lines.push([r.n,r.yr,r.pmt.toFixed(2),r.int.toFixed(2),r.prin.toFixed(2),(r.lump||0).toFixed(2),r.tax.toFixed(2),r.heat.toFixed(2),r.c50.toFixed(2),r.out.toFixed(2),r.bal.toFixed(2)].join(','));
+    });
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/csv'}));
+    a.download='FINANC1FYD_amortization.csv';a.click();
+  });
+}
+
+/* ── SVG DONUT ── */
+var CLR=['#d6001c','#f87171','#f97316','#eab308','#22c55e','#3b82f6','#a855f7'];
+function donut(svgId,slices){
+  var svg=el(svgId);if(!svg)return;
+  svg.innerHTML='';
+  var total=0;
+  slices.forEach(function(s){total+=Math.max(0,s.v||0);});
+  var NS='http://www.w3.org/2000/svg',cx=155,cy=143,R=112,ri=68;
+  function mkEl(tag,attrs){
+    var e=document.createElementNS(NS,tag);
+    Object.keys(attrs).forEach(function(k){e.setAttribute(k,attrs[k]);});
+    return e;
+  }
+  if(!total){
+    svg.appendChild(mkEl('text',{x:cx,y:cy+4,'text-anchor':'middle',fill:'rgba(11,11,11,.38)','font-size':'13'}));
+    svg.lastChild.textContent='No data';return;
+  }
+  var angle=-Math.PI/2;
+  slices.forEach(function(s,idx){
+    var v=Math.max(0,s.v||0);if(!v)return;
+    var sw=(v/total)*Math.PI*2,large=sw>Math.PI?1:0,ea=angle+sw;
+    var x1=cx+R*Math.cos(angle),y1=cy+R*Math.sin(angle);
+    var x2=cx+R*Math.cos(ea),y2=cy+R*Math.sin(ea);
+    var p=mkEl('path',{d:'M '+x1+' '+y1+' A '+R+' '+R+' 0 '+large+' 1 '+x2+' '+y2+' L '+cx+' '+cy+' Z',fill:s.color||CLR[idx%CLR.length],stroke:'#fff','stroke-width':'2.5'});
+    svg.appendChild(p);angle=ea;
+  });
+  svg.appendChild(mkEl('circle',{cx:cx,cy:cy,r:ri,fill:'#ffffff',stroke:'rgba(11,11,11,.07)','stroke-width':'1'}));
+  var tl=mkEl('text',{x:cx,y:cy-8,'text-anchor':'middle',fill:'rgba(11,11,11,.42)','font-size':'9','font-weight':'900','letter-spacing':'2'});
+  tl.textContent='TOTAL';svg.appendChild(tl);
+  var tv=mkEl('text',{x:cx,y:cy+13,'text-anchor':'middle',fill:'#0b0b0b','font-size':'13','font-weight':'900'});
+  tv.textContent=fmt(total);svg.appendChild(tv);
+  var ly=20;
+  slices.forEach(function(s,idx){
+    var v=Math.max(0,s.v||0);if(!v)return;
+    svg.appendChild(mkEl('rect',{x:310,y:ly,width:11,height:11,rx:3,fill:s.color||CLR[idx%CLR.length]}));
+    var tx=mkEl('text',{x:325,y:ly+9,fill:'rgba(11,11,11,.72)','font-size':'11'});
+    tx.textContent=s.label+': '+fmt(v)+' ('+((v/total)*100).toFixed(1)+'%)';
+    svg.appendChild(tx);ly+=22;
+  });
+}
+
+/* ── SVG BAR CHART ── */
+function barChart(svgId,rows,n){
+  var svg=el(svgId);if(!svg||!rows.length)return;
+  svg.innerHTML='';
+  var NS='http://www.w3.org/2000/svg',W=880,H=190,pL=70,pB=36,pT=20,pR=20;
+  var cW=W-pL-pR,cH=H-pB-pT;
+  function mkEl(tag,attrs){var e=document.createElementNS(NS,tag);Object.keys(attrs).forEach(function(k){e.setAttribute(k,attrs[k]);});return e;}
+  var pts=[],first=rows[0];
+  pts.push({yr:0,bal:first.bal+first.prin+(first.lump||0)});
+  rows.forEach(function(r){if(r.n%n===0||r.n===rows[rows.length-1].n)pts.push({yr:r.yr,bal:r.bal});});
+  var maxB=pts[0].bal,maxY=pts[pts.length-1].yr;
+  if(!maxB||!maxY)return;
+  for(var i=0;i<=4;i++){
+    var yV=maxB*(1-i/4),yP=pT+(cH*i/4);
+    svg.appendChild(mkEl('line',{x1:pL,y1:yP,x2:W-pR,y2:yP,stroke:'rgba(11,11,11,.07)','stroke-width':'1'}));
+    var yt=mkEl('text',{x:pL-5,y:yP+4,'text-anchor':'end',fill:'rgba(11,11,11,.40)','font-size':'9'});
+    yt.textContent='$'+(yV/1000).toFixed(0)+'K';svg.appendChild(yt);
+  }
+  var pd='',ad='';
+  pts.forEach(function(p,i){
+    var x=pL+(p.yr/maxY)*cW,y=pT+cH*(1-p.bal/maxB);
+    if(i===0){pd='M '+x+' '+y;ad='M '+x+' '+(H-pB)+' L '+x+' '+y;}
+    else{pd+=' L '+x+' '+y;ad+=' L '+x+' '+y;}
+    if(p.yr%5===0){
+      var xt=mkEl('text',{x:x,y:H-pB+13,'text-anchor':'middle',fill:'rgba(11,11,11,.40)','font-size':'9'});
+      xt.textContent='Yr '+p.yr;svg.appendChild(xt);
+    }
+  });
+  var lx=pL+(pts[pts.length-1].yr/maxY)*cW;
+  ad+=' L '+lx+' '+(H-pB)+' Z';
+  svg.appendChild(mkEl('path',{d:ad,fill:'rgba(214,0,28,.09)'}));
+  svg.appendChild(mkEl('path',{d:pd,fill:'none',stroke:'#d6001c','stroke-width':'2.5','stroke-linejoin':'round','stroke-linecap':'round'}));
+  svg.appendChild(mkEl('line',{x1:pL,y1:pT,x2:pL,y2:H-pB,stroke:'rgba(11,11,11,.14)','stroke-width':'1'}));
+  svg.appendChild(mkEl('line',{x1:pL,y1:H-pB,x2:W-pR,y2:H-pB,stroke:'rgba(11,11,11,.14)','stroke-width':'1'}));
+}
+
+/* ═══════════════════════════════════
+   ▶  PAYMENT CALCULATOR BUTTON
+═══════════════════════════════════ */
+if(el('btnPay')){
+  el('btnPay').addEventListener('click',function(){
+    $h('p_err');
+    var price=n0('p_price'),dpPct=n0('p_down');
+    var amort=n0('p_amort'),rateV=parseFloat(val('p_rate'));
+    var perYr=parseInt(val('p_freq'),10)||12;
+    var cmhcM=val('p_cmhc');
+    var heat=n0('p_heat'),condo=n0('p_condo'),taxMo=n0('p_tax');
+    var lumpA=n0('p_lump'),lumpW=val('p_lw');
+    if(!price)                                   {$e('p_err','⚠️ Enter Home Price.');return;}
+    if(!dpPct)                                   {$e('p_err','⚠️ Enter Down Payment %.');return;}
+    if(!amort||amort<1||amort>30)                {$e('p_err','⚠️ Amortization must be 1–30 years.');return;}
+    if(!isFinite(rateV)||rateV<=0||rateV>25)     {$e('p_err','⚠️ Enter a valid Interest Rate, e.g. 5.50');return;}
+    var dpA=price*dpPct/100,base=price-dpA;
+    if(base<=0){$e('p_err','⚠️ Down payment equals or exceeds home price.');return;}
+    var ltv=(base/price)*100;
+    var nt=el('c_nt')?el('c_nt').value==='yes':false;
+    var cmhcP=0;
+    if(cmhcM!=='no'&&price<1500000&&ltv>80&&ltv<=95&&dpPct>=5)cmhcP=base*cmhcRate(ltv,nt)/100;
+    var financed=cmhcM==='add'?base+cmhcP:base;
+    var N=Math.round(amort*perYr),payment=pmt(financed,rateV,N,perYr);
+    var moEq=perYr===12?payment:perYr===26?payment*26/12:payment*52/12;
+    var c50=condo*0.5,housing=moEq+taxMo+heat+c50;
+    buildSched(financed,rateV,N,perYr,taxMo,heat,c50,lumpA,lumpW);
+    var totalInt=0;SCHED.forEach(function(r){totalInt+=r.int;});
+    var actualN=SCHED.length,effAnn=(Math.pow(1+perRate(rateV,perYr),perYr)-1)*100;
+    var yrs=Math.floor(actualN/perYr),rem=actualN%perYr;
+    var fl=perYr===12?'/mo':perYr===26?'/biweek':'/wk';
+    set('r_base',fmt(base));
+    set('r_cmhc',cmhcM==='sep'?fmt(cmhcP)+' (upfront)':cmhcP>0?fmt(cmhcP)+' (financed)':fmt(0));
+    set('r_total',fmt(financed));
+    set('r_pmt',fmt(payment)+fl);
+    set('r_housing',fmt(housing)+'/mo equiv.');
+    set('r_payoff',yrs+' yr'+(yrs!==1?'s':'')+(rem?' '+rem+' pmt'+(rem!==1?'s':''):''));
+    set('r_tint',fmt(totalInt));
+    set('r_eff',effAnn.toFixed(4)+'% eff. annual');
+    set('r_irat',(totalInt/financed*100).toFixed(1)+'% of principal');
+    var gN=moEq+taxMo+heat+c50,gR=(gN/10000)*100;
+    set('r_gnum',fmt(gN)+'/mo');
+    var ge=el('r_gpct');
+    if(ge){ge.textContent=gR.toFixed(2)+'% (at $10K/mo)';ge.style.color=gR>39?'#d6001c':'#047857';}
+    if(el('a_mtg')) el('a_mtg').value=moEq.toFixed(2);
+    if(el('a_heat')&&!n0('a_heat'))el('a_heat').value=heat;
+    if(el('a_tax') &&!n0('a_tax')) el('a_tax').value=taxMo;
+    if(el('a_condo')&&!n0('a_condo'))el('a_condo').value=condo;
+    var r0=perRate(rateV,perYr),fi=financed*r0,fp=payment-fi;
+    donut('svg1',[{v:fp,color:'#d6001c',label:'Principal'},{v:fi,color:'#f87171',label:'Interest'}]);
+    var sl2=[{v:moEq,color:'#d6001c',label:'P+I'}];
+    if(taxMo>0)sl2.push({v:taxMo,color:'#f97316',label:'Property Tax'});
+    if(heat>0) sl2.push({v:heat, color:'#eab308',label:'Heat'});
+    if(c50>0)  sl2.push({v:c50,  color:'#a855f7',label:'Condo (50%)'});
+    donut('svg2',sl2);
+    barChart('svg3',SCHED,perYr);
+    SS=25;renderSched(SS);
+    show('p_results');
+    setTimeout(function(){var r=el('p_results');if(r)r.scrollIntoView({behavior:'smooth',block:'start'});},80);
+  });
+}
+
+/* ═══════════════════════════════════
+   ▶  GDS / T
+<script>
+(function(){
+'use strict';
+function el(id){return document.getElementById(id);}
+function val(id){return el(id)?el(id).value:'';}
+function n0(id){var v=parseFloat(val(id));return isFinite(v)?Math.max(0,v):0;}
+function set(id,t){if(el(id))el(id).textContent=t;}
+function show(id){if(el(id))el(id).style.display='block';}
+function $e(id,msg){if(el(id)){el(id).style.display='block';el(id).innerHTML=msg;}}
+function $h(id){if(el(id)){el(id).style.display='none';el(id).textContent='';}}
+function fmt(n){return isFinite(n)?'$'+Math.abs(n).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';}
+
+function perRate(ann,n){var s=ann/100/2,e=Math.pow(1+s,2)-1;return Math.pow(1+e,1/n)-1;}
+function calcPmt(P,ann,N,n){if(P<=0||N<=0)return 0;var r=perRate(ann,n);if(r<1e-12)return P/N;var pw=Math.pow(1+r,N);return P*r*pw/(pw-1);}
+function calcPrin(p,ann,N,n){var r=perRate(ann,n);if(r<1e-12)return p*N;var pw=Math.pow(1+r,N);return p*(pw-1)/(r*pw);}
+function cmhcRate(ltv,nt){var b=ltv<=65?0.60:ltv<=75?1.70:ltv<=80?2.40:ltv<=85?2.80:ltv<=90?3.10:4.00;return nt?b+0.50:b;}
+function minDown(p){if(p>=1500000)return p*0.20;if(p<=500000)return p*0.05;return 25000+(p-500000)*0.10;}
+
+/* TABS */
+var TABS=document.querySelectorAll('.tab');
+var PANELS=document.querySelectorAll('.panel');
+TABS.forEach(function(b){
+  b.addEventListener('click',function(){
+    TABS.forEach(function(x){x.classList.remove('tab-on');});
+    PANELS.forEach(function(x){x.classList.remove('panel-on');});
+    b.classList.add('tab-on');
+    var t=el(b.getAttribute('data-panel'));
+    if(t)t.classList.add('panel-on');
+  });
+});
+function goP1(){
+  TABS.forEach(function(x){x.classList.remove('tab-on');});
+  PANELS.forEach(function(x){x.classList.remove('panel-on');});
+  var bt=document.querySelector('.tab[data-panel="p1"]');
+  if(bt)bt.classList.add('tab-on');
+  if(el('p1'))el('p1').classList.add('panel-on');
+}
+
+/* LIVE DOWN PAYMENT */
+function liveDown(){
+  var price=n0('p_price'),dpPct=n0('p_down');
+  var da=el('p_damt'),dw=el('p_dwarn');
+  if(!da)return;
+  if(!price||!dpPct){da.textContent='';if(dw)dw.style.display='none';return;}
+  var dpv=price*dpPct/100;
+  da.textContent='Down payment: '+fmt(dpv);
+  var mn=minDown(price);
+  if(dw){
+    if(dpv<mn-0.01){
+      dw.style.display='block';
+      dw.textContent='Minimum required: '+fmt(mn)+' ('+((mn/price)*100).toFixed(2)+'%)'+(price>=1500000?' — ≥$1.5M: 20% min; CMHC not available':'');
+    }else dw.style.display='none';
+  }
+}
+if(el('p_price'))el('p_price').addEventListener('input',liveDown);
+if(el('p_down'))el('p_down').addEventListener('input',liveDown);
+
+/* ONTARIO CITIES */
+var CITIES=[
+  {n:'Toronto',r:0.6600},{n:'Mississauga',r:0.8300},{n:'Brampton',r:1.0400},
+  {n:'Markham',r:0.6700},{n:'Richmond Hill',r:0.6915},{n:'Vaughan',r:0.7500},
+  {n:'Aurora',r:0.8033},{n:'Newmarket',r:0.8413},{n:'Caledon',r:0.8415},
+  {n:'Oakville',r:0.8185},{n:'Burlington',r:0.8672},{n:'Milton',r:0.7336},
+  {n:'Halton Hills',r:0.8527},{n:'Pickering',r:1.1606},{n:'Ajax',r:1.1832},
+  {n:'Whitby',r:1.1994},{n:'Oshawa',r:1.3762},{n:'Clarington',r:1.2241},
+  {n:'Ottawa',r:1.1400},{n:'Kingston',r:1.4446},{n:'Belleville',r:1.7517},
+  {n:'Peterborough',r:1.5377},{n:'Kawartha Lakes',r:1.3759},{n:'Hamilton',r:1.2600},
+  {n:'St. Catharines',r:1.6316},{n:'Niagara Falls',r:1.5051},{n:'Welland',r:1.7572},
+  {n:'Brantford',r:1.3847},{n:'Kitchener',r:1.1930},{n:'Waterloo',r:1.2042},
+  {n:'Cambridge',r:1.3076},{n:'Guelph',r:1.2291},{n:'London',r:1.3600},
+  {n:'Sarnia',r:1.5965},{n:'Chatham-Kent',r:2.0179},{n:'Windsor',r:1.7800},
+  {n:'Barrie',r:1.2912},{n:'Collingwood',r:0.9700},{n:'Orillia',r:1.5100},
+  {n:'Sudbury',r:1.6495},{n:'Thunder Bay',r:1.7089},{n:'Sault Ste. Marie',r:1.7207},
+  {n:'North Bay',r:1.6643},{n:'Timmins',r:2.5000},{n:'Whitchurch-Stouffville',r:0.7793}
+];
+var tSel=el('t_city');
+if(tSel){
+  CITIES.forEach(function(c){
+    var o=document.createElement('option');
+    o.value=c.r;o.textContent=c.n+' — '+c.r.toFixed(4)+'%';
+    tSel.appendChild(o);
+  });
+  tSel.addEventListener('change',function(){
+    if(!tSel.value)return;
+    var r=parseFloat(tSel.value);
+    if(el('t_rate'))el('t_rate').value=r.toFixed(4);
+    var city=CITIES.find(function(c){return Math.abs(c.r-r)<0.0001;});
+    if(el('t_hint'))el('t_hint').textContent=city?city.n+' 2025 rate (WOWA verified)':'';
+  });
+}
+
+/* TAX BUTTON */
+if(el('btnTax')){
+  el('btnTax').addEventListener('click',function(){
+    var rate=parseFloat(val('t_rate'));
+    var v=n0('t_custom')||n0('t_assessed')||n0('p_price');
+    if(!isFinite(rate)||rate<=0){alert('Select a city or enter a tax rate.');return;}
+    if(!v){alert('Enter a property value or fill Home Price on Payment tab.');return;}
+    var ann=v*rate/100,mo=ann/12;
+    set('t_mo',fmt(mo));set('t_ann',fmt(ann));set('t_rout',rate.toFixed(4)+'%');
+  });
+}
+
+/* COPY TAX BUTTON */
+if(el('btnCopy')){
+  el('btnCopy').addEventListener('click',function(){
+    var txt=el('t_mo')?el('t_mo').textContent:'—';
+    if(!txt||txt==='—'){alert('Run Estimate Tax first.');return;}
+    var mo=parseFloat(txt.replace(/[$,]/g,''));
+    if(isFinite(mo)&&el('p_tax'))el('p_tax').value=mo.toFixed(2);
+    goP1();
+    setTimeout(function(){if(el('p_tax'))el('p_tax').focus();},200);
+  });
+}
+
+/* CMHC BUTTON */
+if(el('btnCMHC')){
+  el('btnCMHC').addEventListener('click',function(){
+    var price=n0('p_price'),dpPct=n0('p_down');
+    var nt=el('c_nt')?el('c_nt').value==='yes':false;
+    var prov=el('c_prov')?el('c_prov').value:'ON';
+    if(!price||!dpPct){alert('Enter Home Price and Down Payment % first.');return;}
+    var dpA=price*dpPct/100,base=price-dpA,ltv=(base/price)*100;
+    set('c_ltv',ltv.toFixed(2)+'%');
+    if(price>=1500000){set('c_rate','N/A');set('c_amt',fmt(0));set('c_note','Homes ≥$1.5M are NOT CMHC insurable (Dec 15, 2024). Minimum 20% down required by law.');return;}
+    if(dpPct<5){set('c_rate','N/A');set('c_amt','—');set('c_note','Minimum 5% down required. $500K–$1.5M: 5% on first $500K + 10% on remainder.');return;}
+    if(ltv<=80){set('c_rate','N/A');set('c_amt',fmt(0));set('c_note','Down ≥20% — CMHC insurance NOT required. No premium charged.');return;}
+    if(ltv>95){set('c_rate','Out of range');set('c_amt','—');set('c_note','LTV exceeds 95%. Maximum insurable LTV is 95%.');return;}
+    var pr=cmhcRate(ltv,nt),prem=base*pr/100;
+    set('c_rate',pr.toFixed(2)+'%');set('c_amt',fmt(prem));
+    var pstMap={ON:0.08,QC:0.09,SK:0.06},pstR=pstMap[prov]||0,pstA=prem*pstR;
+    var note='Premium '+fmt(prem)+' added to mortgage. ';
+    if(pstR>0)note+=prov+' PST ('+(pstR*100).toFixed(0)+'%) = '+fmt(pstA)+' — paid upfront at closing; CANNOT be financed.';
+    else note+='No PST in your province.';
+    if(nt)note+=' Non-traditional +0.50% surcharge included.';
+    set('c_note',note);
+  });
+}
+
+/* AMORTIZATION SCHEDULE */
+var SCHED=[],SS=0;
+function buildSched(P,ann,N,n,tax,heat,c50,lumpA,lumpW){
+  SCHED=[];
+  var r=perRate(ann,n),payment=calcPmt(P,ann,N,n),bal=P;
+  for(var i=1;i<=N&&bal>0.005;i++){
+    var ip=bal*r,pp=Math.min(payment-ip,bal);
+    if(pp<0)pp=0;
+    bal-=pp;if(bal<0.01)bal=0;
+    var lump=0,yr=Math.ceil(i/n);
+    var doL=(lumpW==='annual'&&i%n===0)||(lumpW==='y1'&&i===n)||(lumpW==='y2'&&i===n*2)||(lumpW==='y3'&&i===n*3)||(lumpW==='y5'&&i===n*5);
+    if(doL&&lumpA>0&&bal>0){lump=Math.min(lumpA,bal);bal-=lump;if(bal<0)bal=0;}
+    SCHED.push({n:i,yr:yr,pmt:payment,int:ip,prin:pp,lump:lump,tax:tax,heat:heat,c50:c50,out:payment+lump+tax+heat+c50,bal:Math.max(0,bal)});
+    if(bal<=0)break;
+  }
+}
+function renderSched(count){
+  var tb=el('p_tbody');if(!tb)return;
+  tb.innerHTML='';
+  var end=Math.min(count,SCHED.length);
+  for(var i=0;i<end;i++){
+    var r=SCHED[i];
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td>'+r.n+'</td><td>'+r.yr+'</td><td>'+fmt(r.pmt)+'</td><td>'+fmt(r.int)+'</td><td>'+fmt(r.prin)+'</td><td>'+(r.lump>0?fmt(r.lump):'—')+'</td><td>'+fmt(r.tax)+'</td><td>'+fmt(r.heat)+'</td><td>'+fmt(r.c50)+'</td><td>'+fmt(r.out)+'</td><td>'+fmt(r.bal)+'</td>';
+    tb.appendChild(tr);
+  }
+}
+if(el('btnMore'))el('btnMore').addEventListener('click',function(){SS=Math.min(SS+25,SCHED.length);renderSched(SS);});
+if(el('btnAll'))el('btnAll').addEventListener('click',function(){SS=SCHED.length;renderSched(SS);});
+if(el('btnToggle'))el('btnToggle').addEventListener('click',function(){var b=el('p_sbox');if(b)b.style.display=b.style.display==='block'?'none':'block';});
+if(el('btnCSV')){
+  el('btnCSV').addEventListener('click',function(){
+    if(!SCHED.length){alert('Calculate first.');return;}
+    var lines=['#,Year,Payment,Interest,Principal,Lump,Tax,Heat,Condo50,TotalOut,Balance'];
+    SCHED.forEach(function(r){lines.push([r.n,r.yr,r.pmt.toFixed(2),r.int.toFixed(2),r.prin.toFixed(2),(r.lump||0).toFixed(2),r.tax.toFixed(2),r.heat.toFixed(2),r.c50.toFixed(2),r.out.toFixed(2),r.bal.toFixed(2)].join(','));});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/csv'}));
+    a.download='FINANC1FYD_amortization.csv';a.click();
+  });
+}
+
+/* SVG DONUT */
+var CLR=['#d6001c','#f87171','#f97316','#eab308','#22c55e','#3b82f6','#a855f7'];
+function donut(svgId,slices){
+  var svg=el(svgId);if(!svg)return;
+  svg.innerHTML='';
+  var total=0;slices.forEach(function(s){total+=Math.max(0,s.v||0);});
+  var NS='http://www.w3.org/2000/svg',cx=155,cy=143,R=112,ri=68;
+  function mk(tag,attrs){var e=document.createElementNS(NS,tag);Object.keys(attrs).forEach(function(k){e.setAttribute(k,attrs[k]);});return e;}
+  if(!total){var nt=mk('text',{x:cx,y:cy,'text-anchor':'middle',fill:'rgba(11,11,11,.38)','font-size':'13'});nt.textContent='No data';svg.appendChild(nt);return;}
+  var angle=-Math.PI/2;
+  slices.forEach(function(s,idx){
+    var v=Math.max(0,s.v||0);if(!v)return;
+    var sw=(v/total)*Math.PI*2,large=sw>Math.PI?1:0,ea=angle+sw;
+    var x1=cx+R*Math.cos(angle),y1=cy+R*Math.sin(angle),x2=cx+R*Math.cos(ea),y2=cy+R*Math.sin(ea);
+    svg.appendChild(mk('path',{d:'M '+x1+' '+y1+' A '+R+' '+R+' 0 '+large+' 1 '+x2+' '+y2+' L '+cx+' '+cy+' Z',fill:s.color||CLR[idx%CLR.length],stroke:'#fff','stroke-width':'2.5'}));
+    angle=ea;
+  });
+  svg.appendChild(mk('circle',{cx:cx,cy:cy,r:ri,fill:'#fff',stroke:'rgba(11,11,11,.07)','stroke-width':'1'}));
+  var tl=mk('text',{x:cx,y:cy-8,'text-anchor':'middle',fill:'rgba(11,11,11,.42)','font-size':'9','font-weight':'900','letter-spacing':'2'});tl.textContent='TOTAL';svg.appendChild(tl);
+  var tv=mk('text',{x:cx,y:cy+13,'text-anchor':'middle',fill:'#0b0b0b','font-size':'13','font-weight':'900'});tv.textContent=fmt(total);svg.appendChild(tv);
+  var ly=20;
+  slices.forEach(function(s,idx){
+    var v=Math.max(0,s.v||0);if(!v)return;
+    svg.appendChild(mk('rect',{x:310,y:ly,width:11,height:11,rx:'3',fill:s.color||CLR[idx%CLR.length]}));
+    var tx=mk('text',{x:325,y:ly+9,fill:'rgba(11,11,11,.72)','font-size':'11'});
+    tx.textContent=s.label+': '+fmt(v)+' ('+((v/total)*100).toFixed(1)+'%)';
+    svg.appendChild(tx);ly+=22;
+  });
+}
+
+/* SVG BAR CHART */
+function barChart(svgId,rows,n){
+  var svg=el(svgId);if(!svg||!rows.length)return;
+  svg.innerHTML='';
+  var NS='http://www.w3.org/2000/svg',W=880,H=190,pL=70,pB=36,pT=20,pR=20,cW=W-pL-pR,cH=H-pB-pT;
+  function mk(tag,attrs){var e=document.createElementNS(NS,tag);Object.keys(attrs).forEach(function(k){e.setAttribute(k,attrs[k]);});return e;}
+  var pts=[],first=rows[0];
+  pts.push({yr:0,bal:first.bal+first.prin+(first.lump||0)});
+  rows.forEach(function(r){if(r.n%n===0||r.n===rows[rows.length-1].n)pts.push({yr:r.yr,bal:r.bal});});
+  var maxB=pts[0].bal,maxY=pts[pts.length-1].yr;
+  if(!maxB||!maxY)return;
+  for(var i=0;i<=4;i++){
+    var yV=maxB*(1-i/4),yP=pT+cH*i/4;
+    svg.appendChild(mk('line',{x1:pL,y1:yP,x2:W-pR,y2:yP,stroke:'rgba(11,11,11,.07)','stroke-width':'1'}));
+    var yt=mk('text',{x:pL-5,y:yP+4,'text-anchor':'end',fill:'rgba(11,11,11,.40)','font-size':'9'});
+    yt.textContent='$'+(yV/1000).toFixed(0)+'K';svg.appendChild(yt);
+  }
+  var pd='',ad='';
+  pts.forEach(function(p,i){
+    var x=pL+(p.yr/maxY)*cW,y=pT+cH*(1-p.bal/maxB);
+    if(i===0){pd='M '+x+' '+y;ad='M '+x+' '+(H-pB)+' L '+x+' '+y;}
+    else{pd+=' L '+x+' '+y;ad+=' L '+x+' '+y;}
+    if(p.yr%5===0){var xt=mk('text',{x:x,y:H-pB+13,'text-anchor':'middle',fill:'rgba(11,11,11,.40)','font-size':'9'});xt.textContent='Yr '+p.yr;svg.appendChild(xt);}
+  });
+  var lx=pL+(pts[pts.length-1].yr/maxY)*cW;
+  ad+=' L '+lx+' '+(H-pB)+' Z';
+  svg.appendChild(mk('path',{d:ad,fill:'rgba(214,0,28,.09)'}));
+  svg.appendChild(mk('path',{d:pd,fill:'none',stroke:'#d6001c','stroke-width':'2.5','stroke-linejoin':'round','stroke-linecap':'round'}));
+  svg.appendChild(mk('line',{x1:pL,y1:pT,x2:pL,y2:H-pB,stroke:'rgba(11,11,11,.14)','stroke-width':'1'}));
+  svg.appendChild(mk('line',{x1:pL,y1:H-pB,x2:W-pR,y2:H-pB,stroke:'rgba(11,11,11,.14)','stroke-width':'1'}));
+}
+
+/* ═══════════════════════════════════
+   ▶  PAYMENT CALCULATOR
+═══════════════════════════════════ */
+if(el('btnPay')){
+  el('btnPay').addEventListener('click',function(){
+    $h('p_err');
+    var price=n0('p_price'),dpPct=n0('p_down'),amort=n0('p_amort');
+    var rateV=parseFloat(val('p_rate')),perYr=parseInt(val('p_freq'),10)||12;
+    var cmhcM=val('p_cmhc'),heat=n0('p_heat'),condo=n0('p_condo'),taxMo=n0('p_tax');
+    var lumpA=n0('p_lump'),lumpW=val('p_lw');
+    if(!price)                                {$e('p_err','⚠️ Enter a Home Price.');return;}
+    if(!dpPct)                                {$e('p_err','⚠️ Enter Down Payment %.');return;}
+    if(!amort||amort<1||amort>30)             {$e('p_err','⚠️ Amortization must be 1–30 years.');return;}
+    if(!isFinite(rateV)||rateV<=0||rateV>25)  {$e('p_err','⚠️ Enter a valid Interest Rate e.g. 5.50');return;}
+    var dpA=price*dpPct/100,base=price-dpA;
+    if(base<=0){$e('p_err','⚠️ Down payment equals or exceeds home price.');return;}
+    var ltv=(base/price)*100;
+    var nt=el('c_nt')?el('c_nt').value==='yes':false;
+    var cmhcP=0;
+    if(cmhcM!=='no'&&price<1500000&&ltv>80&&ltv<=95&&dpPct>=5)cmhcP=base*cmhcRate(ltv,nt)/100;
+    var financed=cmhcM==='add'?base+cmhcP:base;
+    var N=Math.round(amort*perYr),payment=calcPmt(financed,rateV,N,perYr);
+    var moEq=perYr===12?payment:perYr===26?payment*26/12:payment*52/12;
+    var c50=condo*0.5,housing=moEq+taxMo+heat+c50;
+    buildSched(financed,rateV,N,perYr,taxMo,heat,c50,lumpA,lumpW);
+    var totalInt=0;SCHED.forEach(function(r){totalInt+=r.int;});
+    var actualN=SCHED.length,effAnn=(Math.pow(1+perRate(rateV,perYr),perYr)-1)*100;
+    var yrs=Math.floor(actualN/perYr),rem=actualN%perYr;
+    var fl=perYr===12?'/mo':perYr===26?'/biweek':'/wk';
+    set('r_base',fmt(base));
+    set('r_cmhc',cmhcM==='sep'?fmt(cmhcP)+' (upfront)':cmhcP>0?fmt(cmhcP)+' (financed)':fmt(0));
+    set('r_total',fmt(financed));
+    set('r_pmt',fmt(payment)+fl);
+    set('r_housing',fmt(housing)+'/mo equiv.');
+    set('r_payoff',yrs+' yr'+(yrs!==1?'s':'')+(rem?' '+rem+' pmt'+(rem!==1?'s':''):''));
+    set('r_tint',fmt(totalInt));
+    set('r_eff',effAnn.toFixed(4)+'% eff. annual');
+    set('r_irat',(totalInt/financed*100).toFixed(1)+'% of principal');
+    var gN=moEq+taxMo+heat+c50,gR=(gN/10000)*100;
+    set('r_gnum',fmt(gN)+'/mo');
+    var ge=el('r_gpct');
+    if(ge){ge.textContent=gR.toFixed(2)+'% (at $10K/mo)';ge.style.color=gR>39?'#d6001c':'#047857';}
+    if(el('a_mtg'))el('a_mtg').value=moEq.toFixed(2);
+    if(el('a_heat')&&!n0('a_heat'))el('a_heat').value=heat;
+    if(el('a_tax')&&!n0('a_tax'))el('a_tax').value=taxMo;
+    if(el('a_condo')&&!n0('a_condo'))el('a_condo').value=condo;
+    var r0=perRate(rateV,perYr),fi=financed*r0,fp=payment-fi;
+    donut('svg1',[{v:fp,color:'#d6001c',label:'Principal'},{v:fi,color:'#f87171',label:'Interest'}]);
+    var sl2=[{v:moEq,color:'#d6001c',label:'P+I'}];
+    if(taxMo>0)sl2.push({v:taxMo,color:'#f97316',label:'Property Tax'});
+    if(heat>0)sl2.push({v:heat,color:'#eab308',label:'Heat'});
+    if(c50>0)sl2.push({v:c50,color:'#a855f7',label:'Condo (50%)'});
+    donut('svg2',sl2);
+    barChart('svg3',SCHED,perYr);
+    SS=25;renderSched(SS);
+    show('p_results');
+    setTimeout(function(){var r=el('p_results');if(r)r.scrollIntoView({behavior:'smooth',block:'start'});},80);
+  });
+}
+
+/* ═══════════════════════════════════
+   ▶  GDS / TDS CALCULATOR
+═══════════════════════════════════ */
+if(el('btnAff')){
+  el('btnAff').addEventListener('click',function(){
+    $h('a_err');
+    var income=n0('a_inc');
+    if(!income){$e('a_err','⚠️ Enter your Gross Monthly Income.');return;}
+    var mtg=n0('a_mtg'),tax=n0('a_tax'),heat=n0('a_heat'),condo=n0('a_condo');
+    var debts=n0('a_debts'),rb=n0('a_rb'),rp=n0('a_rp');
+    var c50=condo*0.5;
+    var revUsed=rp>0?rp:(rb>0?rb*0.03:0);
+    var housing=mtg+tax+heat+c50;
+    var allDebt=housing+debts+revUsed;
+    var gR=income>0?(housing/income)*100:0;
+    var tR=income>0?(allDebt/income)*100:0;
+    set('a_house',fmt(housing)+'/mo');
+    set('a_debt',fmt(allDebt)+'/mo');
+    var ge=el('a_gds'),te=el('a_tds');
+    if(ge){ge.textContent=gR.toFixed(2)+'%';ge.style.color=gR>39?'#d6001c':'#047857';}
+    if(te){te.textContent=tR.toFixed(2)+'%';te.style.color=tR>44?'#d6001c':'#047857';}
+    var vEl=el('a_verd');
+    if(vEl){
+      if(gR<=39&&tR<=44){
+        vEl.className='verdict v-ok';
+        vEl.textContent='✅ GDS '+gR.toFixed(2)+'% and TDS '+tR.toFixed(2)+'% are both within CMHC guidelines. You are likely insurable with most lenders.';
+      }else{
+        vEl.className='verdict v-warn';
+        var msgs=[];
+        if(gR>39)msgs.push('⚠️ GDS '+gR.toFixed(2)+'% exceeds CMHC 39% guideline.');
+        if(tR>44)msgs.push('⚠️ TDS '+tR.toFixed(2)+'% exceeds CMHC 44% guideline.');
+        msgs.push('Some uninsured lenders allow GDS up to 42% / TDS up to 47% with strong credit. Contact FINANC1FYD for options.');
+        vEl.textContent=msgs.join(' ');
+      }
+    }
+    show('a_results');
+    setTimeout(function(){var r=el('a_results');if(r)r.scrollIntoView({behavior:'smooth',block:'start'});},80);
+  });
+}
+
+/* ═══════════════════════════════════
+   ▶  MAX MORTGAGE CALCULATOR
+═══════════════════════════════════ */
+if(el('btnMax')){
+  el('btnMax').addEventListener('click',function(){
+    $h('m_err');
+    var income=n0('m_inc');
+    var tax=n0('m_tax'),heat=n0('m_heat'),condo=n0('m_condo');
+    var debts=n0('m_debts'),rb=n0('m_rb'),rp=n0('m_rp');
+    var gLim=parseFloat(val('m_gl'))||39;
+    var tLim=parseFloat(val('m_tl'))||44;
+    var amort=n0('m_amort');
+    var perYr=parseInt(val('m_freq'),10)||12;
+    var rateV=parseFloat(val('m_rate'));
+    var stress=val('m_stress');
+    if(!income)                               {$e('m_err','⚠️ Enter Gross Monthly Income.');return;}
+    if(!amort||amort<1||amort>30)             {$e('m_err','⚠️ Amortization must be 1–30 years.');return;}
+    if(!isFinite(rateV)||rateV<=0||rateV>25)  {$e('m_err','⚠️ Enter a valid Contract Rate e.g. 5.50');return;}
+    /* OSFI B-20 stress test: max(contract + 2%, 5.25%) — confirmed 2026 */
+    var qualRate=rateV;
+    if(stress==='yes')qualRate=Math.max(rateV+2,5.25);
+    var c50=condo*0.5;
+    var revUsed=rp>0?rp:(rb>0?rb*0.03:0);
+    var N=Math.round(amort*perYr);
+    /* Convert per-period payment to monthly equivalent factor */
+    var mF=perYr===12?1:perYr===26?26/12:52/12;
+    var maxGDS=(income*gLim/100)-tax-heat-c50;
+    var maxTDS=(income*tLim/100)-tax-heat-c50-debts-revUsed;
+    var maxMoPI=Math.min(maxGDS,maxTDS);
+    var limiting=maxGDS<=maxTDS?'GDS ('+gLim+'%)':'TDS ('+tLim+'%)';
+    if(maxMoPI<=0){$e('m_err','⚠️ Max P+I is zero or negative — reduce other debts or increase income.');return;}
+    var maxPmt=maxMoPI/mF;
+    var maxMortgage=calcPrin(maxPmt,qualRate,N,perYr);
+    if(maxMortgage<=0){$e('m_err','⚠️ Could not calculate — verify rate and amortization.');return;}
+    var fl=perYr===12?'/mo':perYr===26?'/biweek':'/wk';
+    set('m_lim',limiting);
+    set('m_cr',rateV.toFixed(2)+'%');
+    set('m_qr',qualRate.toFixed(2)+'%'+(stress==='yes'&&qualRate!==rateV?' (OSFI stress test)':''));
+    set('m_pmt',fmt(maxPmt)+fl);
+    set('m_amt',fmt(maxMortgage));
+    show('m_results');
+    setTimeout(function(){var r=el('m_results');if(r)r.scrollIntoView({behavior:'smooth',block:'start'});},80);
+  });
+}
+
+})();
+</script>
